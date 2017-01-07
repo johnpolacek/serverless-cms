@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Serverless CMS Admin</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="css/signin.css" rel="stylesheet">
+  	</head>
+
+  <body>
+
+	<div class="container">
+
+		<form id="form-login" class="form-signin">
+			<h2 class="form-signin-heading">Please sign in</h2>
+			<label for="inputUsername" class="sr-only">User Name</label>
+			<input type="text" id="inputUsername" class="form-control" placeholder="User Name" required autofocus>
+			<label for="inputPassword" class="sr-only">Password</label>
+			<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="remember-me"> Remember me
+				</label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		</form>
+
+		<form id="form-password" class="form-signin" hidden>
+			<h2 class="form-signin-heading">Set a new password to continue</h2>
+			<label for="inputNewPassword" class="sr-only">Password</label>
+			<input type="password" id="inputNewPassword" class="form-control" placeholder="New Password" required>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		</form>
+
+	</div> <!-- /container -->
+
+	<script src="js/jsbn.js"></script>
+    <script src="js/jsbn2.js"></script>
+    <script src="js/sjcl.js"></script>
+    <script src="js/aws-cognito-sdk.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>
+	<script src="js/aws-sdk.min.js"></script>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/jsrender.min.js"></script>
+	<script type="text/x-jsrender" id="adminForm">
+		<form id="form-admin">
+			<h3>Site Info</h3>
+			<div class="form-group">
+			    <label for="siteTitle">Title</label>
+			    <input type="text" value="{{>siteTitle}}" class="form-control" id="siteTitle" name="siteTitle" aria-describedby="siteTitleInfo">
+			    <small id="siteTitleInfo" class="form-text text-muted">The title of the site appears in the upper left corner of the nav bar and in the browser address bar.</small>
+			</div>
+			<div class="form-group pb-2">
+			    <label for="siteDescription">Description</label>
+			    <input type="text" value="{{>siteDescription}}" class="form-control" id="siteDescription" name="siteDescription" aria-describedby="siteDescriptionInfo">
+			    <small id="siteDescriptionInfo" class="form-text text-muted">Set the meta description for the site which will show up in search results and social sharing.</small>
+			</div>
+			<hr>
+			<h3 class="pt-2">Main Callout</h3>
+			<div class="form-group">
+			    <label for="calloutHeadline">Headline</label>
+			    <input type="text" value="{{>calloutHeadline}}" class="form-control" id="calloutHeadline" name="calloutHeadline" aria-describedby="calloutHeadlineInfo">
+			    <small id="calloutHeadlineInfo" class="form-text text-muted">Set the content for the main headline.</small>
+			</div>
+			<div class="form-group">
+			    <label for="calloutText">Text</label>
+			    <textarea class="form-control" id="calloutText" name="calloutText" aria-describedby="calloutTextInfo" rows="3">{{>calloutText}}</textarea>
+			    <small id="calloutTextInfo" class="form-text text-muted">Set the text content that is below the main headline.</small>
+			 </div>
+			 <button type="submit" class="btn btn-primary">Save</button>
+		</form>
+	</script>
+	<script type="text/x-jsrender" id="jumbotronTemplate">
+		<html lang="en">
+			<head>
+				<meta charset="utf-8">
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+				<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+				<meta name="description" content="{{>siteDescription}}">
+				<meta name="author" content="">
+				<title>{{>siteTitle}}</title>
+				<link href="css/bootstrap.min.css" rel="stylesheet">
+				<link href="css/jumbotron.css" rel="stylesheet">
+			</head>
+			<body>
+				<nav class="navbar navbar-static-top navbar-dark bg-inverse">
+					<a class="navbar-brand" href="#">{{>siteTitle}}</a>
+					<ul class="nav navbar-nav">
+						<li class="nav-item active">
+							<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">About</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Contact</a>
+						</li>
+					</ul>
+				</nav>
+				<div class="jumbotron">
+					<div class="container">
+						<h1 class="display-3">{{>calloutHeadline}}</h1>
+						<p>{{>calloutText}}</p>
+						<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<h2>Heading</h2>
+							<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+							<p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+						</div>
+						<div class="col-md-4">
+							<h2>Heading</h2>
+							<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+							<p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+					 </div>
+						<div class="col-md-4">
+							<h2>Heading</h2>
+							<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+							<p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+						</div>
+					</div>
+					<hr>
+					<footer>
+						<p>&copy; Company 2016</p>
+					</footer>
+				</div> <!-- /container -->
+			</body>
+		</html>
+	</script>
+	<script>
+		$(function() {
+		    var cognitoUser, s3;
+
+		    $('.form-signin').on('submit',function(e) {
+		    	e.preventDefault();
+		    	var authenticationData = {
+			        Username : $('#inputUsername').val(),
+			        Password : $('#inputPassword').val()
+			    };
+			    var authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
+			    var poolData = { 
+			        UserPoolId : '...', // your user pool id here
+      				ClientId : '...' // your client id here
+			    };
+			    var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
+			    var userData = {
+			        Username : $('#inputUsername').val(),
+			        Pool : userPool
+			    };
+			    
+			    cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+			    cognitoUser.authenticateUser(authenticationDetails, {
+			    	newPasswordRequired: function(userAttributes, requiredAttributes) {
+			            $('#form-password').removeAttr('hidden');
+			            $('#form-login').css('display','none');
+			            if ($('#inputNewPassword').val() !== '') {
+			            	cognitoUser.completeNewPasswordChallenge($('#inputNewPassword').val(), [], this);
+			            }
+			        },
+			        onSuccess: function (result) {
+			            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+			                IdentityPoolId : 'us-east-1:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+			                Logins : {
+			                    'cognito-idp.us-east-1.amazonaws.com/us-east-1_XXXXXXXXX' : result.getIdToken().getJwtToken()
+			                }
+			            });
+			            $.getJSON('index.json', function( data ) {
+			            	$('.container').html($('#adminForm').render(data));
+			            }).fail(function() {
+			            	$('.container').html($('#adminForm').render({}));
+			            });
+
+			            AWS.config.update({
+							region: 'us-east-1',
+							credentials: new AWS.CognitoIdentityCredentials({
+								IdentityPoolId: 'us-east-1:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+				                Logins : {
+				                    'cognito-idp.us-east-1.amazonaws.com/us-east-1_XXXXXXXXX' : result.getIdToken().getJwtToken()
+				                }
+							})
+						});
+						s3 = new AWS.S3({
+							apiVersion: '2006-03-01',
+							params: {Bucket: YOUR_BUCKET_NAME}
+						});
+			        },
+			        onFailure: function(err) {
+			            alert(err);
+			        }
+			    });
+		    });
+
+			$('.container').on('submit','#form-admin',function(e) {
+		    	e.preventDefault();
+		    	var formData = {};
+				var $formFields = $('#form-admin').find('input, textarea, select').not(':input[type=button], :input[type=submit], :input[type=reset]');
+
+				$formFields.each(function() {
+					formData[$(this).attr('name')] = $(this).val();
+				});
+				
+				var jumbotronHTML = '<!DOCTYPE html>' + $('#jumbotronTemplate').render(formData);
+				var file = new File([jumbotronHTML], 'index.html', {type: "text/html", lastModified: new Date()});
+		    	s3.upload({
+				    Key: 'index.html',
+				    Body: file,
+				    ACL: 'public-read',
+				    ContentDisposition: 'inline',
+				    ContentType: 'text/html'
+				}, function(err, data) {
+				    if (err) {
+				    	return alert('There was an error: ', err.message);
+					}
+					file = new File([JSON.stringify(formData)], 'index.json');
+					s3.upload({
+					    Key: 'admin/index.json',
+					    Body: file,
+					    ACL: 'public-read'
+					}, function(err, data) {
+					    if (err) {
+					    	return alert('There was an error: ', err.message);
+						}
+						$('#form-admin')
+					    	.remove('#success')
+					    	.prepend('<p id="success">Update successful! <a href="../index.html">View Website</a></p>');
+					});
+				});
+		    });
+		});
+	</script>
+  </body>
+</html>
