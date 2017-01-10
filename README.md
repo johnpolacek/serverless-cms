@@ -9,8 +9,7 @@ Built with:
 
 To get the demo up and running you will need to sign up for an AWS account and configure the Cognito, IAM and S3 services.
 
-For step-by-step instructions, refer to the article on CSS-Tricks:
-[Article Link Coming Soon]
+For step-by-step instructions, refer to the [Build a Custom CMS for a Serverless Static Site Generator](https://css-tricks.com/build-custom-cms-serverless-static-site-generator/) article on [CSS-Tricks](https://css-tricks.com/).
 
 --
 
